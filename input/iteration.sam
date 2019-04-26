@@ -1,0 +1,15 @@
+FUNC iter(VAR n) {
+  PRINT("n begins as: ", n);
+  PRINT("/n");
+  
+  _ Iteration using While Loop _
+  WHILE (n > 0) {
+    --n;
+    PRINT("n is now: ", n);
+    PRINT("/n");
+  }
+}
+
+FUNC main() {
+  iter(10);
+}

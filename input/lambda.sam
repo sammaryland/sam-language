@@ -1,0 +1,16 @@
+FUNC f(VAR x){
+  _ Lambda Declaration _
+  LAMBDA (VAR y){RETURN x + y;};
+}
+
+FUNC main() {
+  VAR a = f(3);
+  VAR b = f(11);
+
+  PRINT("a(5) should be 8 and is ", a(5));  
+  PRINT("/n");   
+  PRINT("b(6) should be 17 and is ", b(6)); 
+  PRINT("/n");    
+  PRINT("a(10) should be 13 and is ", a(10));
+  PRINT("/n");    
+}

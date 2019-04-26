@@ -1,0 +1,49 @@
+FUNC makeNum(VAR num) {
+  _ Nested Functions_
+  FUNC subtract(VAR sub) {
+    IF ((num > sub) | (num == sub)) {
+        num = num - sub;
+        RETURN num;
+    }
+  }
+  FUNC add(VAR add) {
+    num = num + add;
+    RETURN num;
+  }
+  
+  _ Nested Lambda _
+  LAMBDA (VAR arg) {
+    IF (arg == "subtract") {
+      RETURN subtract;
+    } ELSE IF (arg == "add") {
+      RETURN add;
+    } ELSE {
+      PRINT("Error: unknown request");
+      RETURN arg;
+    }
+  };
+}
+
+FUNC main() {
+  VAR num1 = makeNum(5);
+  PRINT("Number 1 is 5");
+  PRINT("/n");
+  VAR plus1 = num1("add");
+  PRINT("Adding 40 to number 1 = ", plus1(40));
+  PRINT("/n");
+
+  VAR num2 = makeNum(500);
+  PRINT("Number 2 is 500");
+  PRINT("/n");
+  VAR plus2 = num2("add");
+  PRINT("Adding 50 to number 2 = ", plus2(50));
+  PRINT("/n");
+
+  VAR minus1 = num1("subtract");
+  PRINT("Subtracting 15 from number 1 = ", minus1(15));
+  PRINT("/n");
+
+  VAR minus2 = num2("subtract");
+  PRINT("Subtracting 101 from number 2 = ", minus2(101));
+  PRINT("/n");
+}

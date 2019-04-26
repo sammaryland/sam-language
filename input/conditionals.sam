@@ -1,0 +1,32 @@
+FUNC conditionals(VAR v) {
+  _ If Statements, Else If Statements, and Else Statements _
+  IF (v == "case 1") {
+    PRINT(v, " is case 1");
+    PRINT("/n");
+  } 
+  ELSE IF ((v > 10) & (v < 15)) {
+    PRINT(v, " must be between 10 and 15");
+    PRINT("/n");
+  } 
+  ELSE IF ((v == 1) | (v == 9)) {
+    PRINT(v, " is either 1 or 9");
+    PRINT("/n");
+  } 
+  ELSE IF (v != 0) {
+    PRINT(v, " is not equal to 0");
+    PRINT("/n");
+  } 
+  ELSE {
+    PRINT(v, " must meet none of the other cases!");
+    PRINT("/n");
+  }
+}
+
+FUNC main() {
+  conditionals("case 1");
+  conditionals(12);
+  conditionals(1);
+  conditionals(9);
+  conditionals(-1);
+  conditionals(0);
+}

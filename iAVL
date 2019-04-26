@@ -1,0 +1,386 @@
+_ INDICES FOR AVL NODE ARRAY _
+_ 0 - VALUE _
+_ 1 - PARENT _
+_ 2 - LCHILD _
+_ 3 - RCHILD _
+_ 4 - HEIGHT _
+_ 5 - LHEIGHT _
+_ 6 - RHEIGHT _
+
+FUNC newAVLNODE(VAR v){
+  RETURN array(v, "none", "none", "none", 1, 0, 0);
+}
+
+FUNC setValue(VAR node, VAR newVal) { setArray(node, 0, newVal); }
+FUNC setParent(VAR node, VAR newParent) { setArray(node, 1, newParent); }
+FUNC setLChild(VAR node, VAR newLChild) { setArray(node, 2, newLChild); }
+FUNC setRChild(VAR node, VAR newRChild) { setArray(node, 3, newRChild); }
+FUNC setHeight(VAR node, VAR newHeight) { setArray(node, 4, newHeight); }
+FUNC setLHeight(VAR node, VAR newLHeight) { setArray(node, 5, newLHeight); }
+FUNC setRHeight(VAR node, VAR newRHeight) { setArray(node, 6, newRHeight); }
+
+FUNC getValue(VAR node) { getArray(node, 0); }
+FUNC getParent(VAR node) { getArray(node, 1); }
+FUNC getLChild(VAR node) { getArray(node, 2); }
+FUNC getRChild(VAR node) { getArray(node, 3); }
+FUNC getHeight(VAR node) { getArray(node, 4); }
+FUNC getLHeight(VAR node) { getArray(node, 5); }
+FUNC getRHeight(VAR node) { getArray(node, 6); }
+
+VAR nodeCount = 0;
+VAR tempCount = 0;
+
+FUNC main(){
+  VAR root = newAVLNODE("none");
+  VAR f = CLA(2);
+  VAR fp = openFile(f);
+  VAR i;
+  VAR j;
+  VAR temp;
+
+  WHILE (notFileEnd(fp)){
+    i = readInt(fp);
+    IF (i == 0){
+      printTree(root);
+      tempCount = 0;
+    }
+    ELSE IF (i == 1){
+      nodeCount = nodeCount + 1;
+      j = readInt(fp);
+      root = insert(j, root);
+    }
+  }
+
+  closeFile(fp);
+  RETURN 0;
+}
+
+FUNC insertBST(VAR value, VAR tree){
+  IF (tree == "none") {
+    VAR n = newAVLNODE(value);
+    setParent(n, "root");
+    RETURN n;
+  } 
+  ELSE IF (getValue(tree) == "none") {
+    setValue(tree, value);
+    setParent(tree, "root");
+    RETURN tree;
+  } 
+  ELSE IF (value < getValue(tree)) {
+    IF (getLChild(tree) == "none") {
+      VAR n = newAVLNODE(value);
+      setParent(n, tree);
+      setLChild(tree, n);
+      RETURN n;
+    } 
+    ELSE {
+      RETURN insertBST(value, getLChild(tree));
+    }
+  } 
+  ELSE IF (value > getValue(tree)) {
+    IF (getRChild(tree) == "none") {
+      VAR n = newAVLNODE(value);
+      setParent(n, tree);
+      setRChild(tree, n);
+      RETURN n;
+    } 
+    ELSE {
+      RETURN insertBST(value, getRChild(tree));
+    }
+  } 
+  ELSE {
+    RETURN tree;
+  }
+}
+
+FUNC insertionFixUp(VAR x, VAR tree){
+  VAR flag = 0;
+  VAR p;
+  WHILE (flag == 0){
+    p = getParent(x);
+    IF (isRoot(x) == 1){
+      flag = 1;
+    }
+    ELSE IF (favors(p, getSibling(x)) == 1){
+      setBalance(p);
+      flag = 1;
+    }
+    ELSE IF (getBF(p) == 0){
+      setBalance(p);
+      x = p;
+    }
+    ELSE{
+      VAR y = favorite(x);
+      VAR p = getParent(x);
+      IF ((y != "none") & ((isLinear(y) == 0) | (isLinear(x) == 0))){
+        y = rotateTree(y);
+        y = rotateTree(y);
+        setBalance(x);
+        setBalance(p);
+        setBalance(y);
+        IF (isRoot(y) == 1){tree = y;}
+      }
+      ELSE {
+        x = rotateTree(x);
+        setBalance(p);
+        setBalance(x);
+        IF (isRoot(x) == 1){tree = x;}
+      }
+      flag = 1;
+    }
+  }
+  RETURN tree;
+}
+
+FUNC insert(VAR value, VAR tree){
+  VAR b = insertBST(value, tree);
+  RETURN insertionFixUp(b, tree);
+}
+
+FUNC isRoot(VAR node){
+  IF (getParent(node) == "root"){
+    RETURN 1;
+  }
+  ELSE{
+    RETURN 0;
+  }
+}
+
+FUNC getSibling(VAR node){
+  IF (isLChild(node) == 1){
+    RETURN getRChild(getParent(node));
+  }
+  ELSE {
+    RETURN getLChild(getParent(node));
+  }
+}
+
+FUNC isLChild(VAR node){
+  VAR p = getParent(node);
+  VAR l = getLChild(p);
+  IF ((l != "none") & (getValue(node) == getValue(getLChild(p)))){
+    RETURN 1;
+  }
+  ELSE {
+    RETURN 0;
+  }
+}
+
+FUNC isRChild(VAR node){
+  IF (isLChild(node) == 1){
+    RETURN 0;
+  }
+  ELSE {
+    RETURN 1;
+  }
+}
+
+FUNC setBalance(VAR x){
+  VAR l = getLChild(x);
+  VAR r = getRChild(x);
+
+  IF (l != "none"){
+    l = getHeight(l);
+  }
+  ELSE {
+    l = 0;
+  }
+  IF (r != "none"){
+    r = getHeight(r);
+  }
+  ELSE {
+    r = 0;
+  }
+
+  setLHeight(x, l);
+  setRHeight(x, r);
+  setHeight(x, (max(l, r) + 1));
+}
+
+FUNC max(VAR a, VAR b){
+  IF (a > b){
+    RETURN a;
+  }
+  ELSE IF (b > a){
+    RETURN b;
+  }
+  ELSE IF (a == b){
+    RETURN a;
+  }
+  ELSE {
+    RETURN 0;
+  }
+}
+
+FUNC getBF(VAR node){
+  RETURN (getLHeight(node) - getRHeight(node));
+}
+
+FUNC favorite(VAR p){
+  VAR b = getBF(p);
+  IF (b > 0){
+    RETURN getLChild(p);
+  }
+  ELSE IF (b < 0){
+    RETURN getRChild(p);
+  }
+  ELSE {
+    RETURN "none";
+  }
+}
+
+FUNC isLinear(VAR node){
+  VAR p = getParent(node);
+  IF ((p != "none") & (isRoot(p) == 0)){
+    IF ((isLChild(node) == 1) & (isLChild(p) == 1)){
+      RETURN 1;
+    }
+    ELSE IF ((isRChild(node) == 1) & (isRChild(p) == 1)){
+      RETURN 1;
+    }
+    ELSE {
+      RETURN 0;
+    }
+  }
+  ELSE {
+    RETURN 1;
+  }
+}
+
+FUNC favors(VAR p, VAR child){
+  IF ((child == "none") | (p == "root")){
+    RETURN 0;
+  }
+  ELSE {
+    VAR b = getBF(p);
+    IF (b == 0){
+      RETURN 0;
+    }
+    ELSE IF (b == 1){
+      IF (isLChild(child) == 1){
+        RETURN 1;
+      }
+      ELSE {
+        RETURN 0;
+      }
+    }
+    ELSE {
+      IF (isRChild(child) == 1){
+        RETURN 1;
+      }
+      ELSE {
+        RETURN 0;
+      }
+    }
+  }
+}
+
+FUNC rotateTree(VAR n){
+  IF (isLChild(n) == 1){
+    RETURN rightRotate(n);
+  }
+  IF (isRChild(n) == 1) {
+    RETURN leftRotate(n);
+  }
+}
+
+FUNC rightRotate(VAR n){
+  VAR p = getParent(n);
+  IF (isRoot(p) == 0){
+    VAR gp = getParent(p);
+    VAR r = getRChild(n);
+    IF (isLChild(p) == 1){
+      setLChild(gp, n);
+    }
+    ELSE {
+      setRChild(gp, n);
+    }
+    setParent(n, gp);
+    setLChild(p, getRChild(n));
+    setRChild(n, p);
+    setParent(p, n);
+    IF (r != "none"){
+      setParent(r, p);
+    }
+  }
+  ELSE {
+    VAR r = getRChild(n);
+    setLChild(p, getRChild(n));
+    setRChild(n, p);
+    setParent(p, n);
+    setParent(n, "root");
+    IF (r != "none"){
+      setParent(r, p);
+    }
+  }
+  RETURN n;
+}
+
+FUNC leftRotate(VAR n){
+  VAR p = getParent(n);
+  IF (isRoot(p) == 0){
+    VAR gp = getParent(p);
+    VAR l = getLChild(n);
+    IF (isLChild(p) == 1){
+      setLChild(gp, n);
+    }
+    ELSE {
+      setRChild(gp, n);
+    }
+    setParent(n, gp);
+    setRChild(p, getLChild(n));
+    setLChild(n, p);
+    setParent(p, n);
+    IF (l != "none"){
+      setParent(l, p);
+    }
+  }
+  ELSE {
+    VAR l = getLChild(n);
+    setRChild(p, getLChild(n));
+    setLChild(n, p);
+    setParent(p, n);
+    setParent(n, "root");
+    IF (l != "none"){
+      setParent(l, p);
+    }
+  }
+  RETURN n;
+}
+
+FUNC printTree(VAR tree){
+  inOrderHelper(tree);
+}
+
+FUNC inOrderHelper(VAR tree){
+  IF (tree != "none"){
+    inOrderHelper(getLChild(tree));
+    printNode(tree);
+    inOrderHelper(getRChild(tree));
+  }
+}
+
+FUNC printNode(VAR n){
+  tempCount = tempCount + 1;
+  IF (isRoot(n) == 0){
+    PRINT(getValue(n));
+    IF (getBF(n) < 0){PRINT("-");}
+    IF (getBF(n) > 0){PRINT("+");} 
+    PRINT("(");
+    PRINT(getValue(getParent(n)));
+    IF (getBF(getParent(n)) < 0){PRINT("-");}
+    IF (getBF(getParent(n)) > 0){PRINT("+");} 
+    PRINT(")");
+    IF (tempCount < nodeCount){PRINT(" ");}
+    ELSE {PRINT("/n");}
+  }
+  ELSE {
+    PRINT("[");
+    PRINT(getValue(n));
+    IF (getBF(n) < 0){PRINT("-");}
+    IF (getBF(n) > 0){PRINT("+");} 
+    PRINT("]");
+    IF (tempCount < nodeCount){PRINT(" ");}
+    ELSE {PRINT("/n");}
+  }
+}

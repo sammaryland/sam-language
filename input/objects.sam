@@ -1,0 +1,32 @@
+STRUCT a{
+  VAR string = "Original String";
+  FUNC setString(VAR val){string = val;}
+  FUNC getString(){RETURN string;}
+};
+
+FUNC main(){
+  VAR f = a();
+
+  _ Get Field _
+  VAR s = f.string;
+  PRINT("Get field: ", s);
+  PRINT("/n");
+
+  _ Update Field _
+  f.string = "UPDATED";
+  s = f.string;
+  PRINT("Updated field: ", s);
+  PRINT("/n");
+  
+  _ Get Function _
+  PRINT("The original string is: ", f.getString());
+  PRINT("/n");
+  
+  _ Set Function _
+  f.setString("THIS IS REALLY COOL!");
+  
+  PRINT("The string is now: ", f.getString());
+  PRINT("/n");
+  
+  RETURN 0;
+}

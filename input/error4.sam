@@ -1,0 +1,5 @@
+FUNC main() {
+  _ Error trying to access index out of range _
+  VAR a = array(1, 2, 3, 4, 5);
+  getArray(a, 7);
+}

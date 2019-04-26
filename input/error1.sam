@@ -1,0 +1,4 @@
+FUNC main() {
+  _ Error line must end with semicolon _
+  VAR a = 7
+}

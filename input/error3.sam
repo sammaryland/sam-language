@@ -1,0 +1,8 @@
+FUNC main(){
+  VAR a = 0;
+  
+  _ Error no closing bracket for While Loop _
+  WHILE (a < 10){
+    ++a;
+
+}

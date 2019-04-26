@@ -1,0 +1,5 @@
+FUNC main(){
+  VAR a = 4;
+  _ Error Else Statement must have corresponding If Statement _
+  ELSE {PRINT(a);}
+}

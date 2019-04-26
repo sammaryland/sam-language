@@ -1,0 +1,108 @@
+program : definition
+        | definition program
+
+definition : structDef
+           | varDef
+           | funcDef
+
+literal : INTEGER
+        | DOUBLE
+        | STRING
+        | BOOLEAN
+        | CHAR
+        
+operator : EQUALS
+         | comparator
+         | PLUS
+         | TIMES
+         | MINUS
+         | DIVIDE
+         | MOD
+         | SET
+         | AND
+         | OR
+         | NOT
+         
+unaryOperator : PLUSPLUS
+              | MINUSMINUS
+
+comparator : GTH
+           | LTH
+           | GTHE
+           | LTHE
+
+expression : unary
+           | unary operator expression
+           | returnStatement unary
+           | unaryOperator unary
+
+varDef : VAR ID SET expression SEMICOLON
+       | VAR ID SEMICOLON
+
+unary : literal
+      | ID
+      | LPAREN expression RPAREN
+      | MINUS unary
+      | ID LPAREN optExpList RPAREN
+
+expList : expression
+        | expression COMMA expList
+
+optExpList : expList
+           | *EMPTY*
+
+ifStatement : IF LPAREN expression RPAREN block optElse
+
+optElse : ELSE block
+        | ELSE ifStatement
+        | *EMPTY*
+
+whileLoop : WHILE LPAREN expression RPAREN block
+
+forLoop : FOR LPAREN varDef conditional SEMICOLON unaryOperator unary RPAREN block
+
+block : LBRACE optStatementList RBRACE
+
+conditional : unary comparator unary
+
+conditionalList : conditional
+                | conditional AND conditionalList
+                | conditional OR conditionalList
+
+optStatementList : statementList
+                 | *EMPTY*
+
+statementList : statement
+              | statement statementList
+
+statement : definition
+          | expression SEMICOLON
+          | ifStatement
+          | whileLoop
+          | forLoop
+          | comment
+
+funcDef : FUNC ID LPAREN optParamList RPAREN block
+
+funcCall : ID LPAREN optExpList RPAREN SEMICOLON
+
+optParamList : paramList
+             | *EMPTY*
+
+paramList : ID
+          | ID COMMA paramList
+
+arrayDef : VAR ID LBRACKET INTEGER RBRACKET SET LBRACKET expList RBRACKET
+
+arraySet : ID LBRACKET INTEGER RBRACKET SET unary
+
+pointerVar : VAR ASTERISK ID
+           | VAR ASTERISK ID SET expression SEMICOLON
+
+structAccess : ID COLON ID
+
+structDef : STRUCT ID block SEMICOLON
+
+comment : ** expression **
+
+returnStatement : RETURN unary

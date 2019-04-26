@@ -1,0 +1,12 @@
+STRUCT a{
+  VAR data;
+  VAR string;
+};
+
+FUNC main(){
+  VAR b = a();
+  
+  _ Error trying to access non existent object field _
+  b.i = 3;
+  RETURN 0;
+}

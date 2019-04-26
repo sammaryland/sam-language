@@ -1,0 +1,58 @@
+**Structure Definition**
+STRUCT s{
+  VAR data = 23;
+};
+
+**Structure Access**
+VAR num = s : data;
+
+**Variable Definitions**
+VAR i = "Hello, world!";
+VAR j;
+
+**Function Definitions**
+FUNC adder (param1, param2){ 
+  VAR sum = 0;
+  sum = (param1 + param2);
+  RETURN sum;
+}
+
+**Function Call**
+adder(1, 3);
+
+**Expression**
+v = 2 + 4;
+
+**Conditional**
+IF (v >= 23 AND v % 2 == 0 OR v < 10){
+  v++;
+}
+
+**IF/ELSE Statement Chain**
+IF ( v >= 23 ) {
+  v--;
+} ELSE IF (v < 10){
+  v++;
+} ELSE {
+  v = rand () ;
+}
+
+**WHILE Loop**
+WHILE (v < 23){
+  v++;
+}
+
+**FOR Loop**
+FOR (VAR i = 0; i < 20; i++){
+  v++;
+}
+
+**Array Definition**
+VAR arr[5] = [0, 1, 2, 3, 4, 5];
+
+**Array Set**
+arr[3] = 10;
+
+**Pointer Variable**
+VAR *p;
+VAR *k = 15;

@@ -1,0 +1,27 @@
+FUNC f(VAR a, VAR b) {
+  RETURN a * b;
+}
+
+FUNC main() {
+  _ Declare an array using array(arguments) _
+  VAR a = array(1, 3.123, f(3,4), "3", "my name is sam"); 
+  PRINT ("Array a is: ");
+  PRINT("/n");
+  PRINT (a);
+  PRINT("/n");
+  
+  _ Get the size using sizeArray(array) _
+  PRINT ("The size of a is: ", sizeArray(a));
+  PRINT("/n");
+  
+  _ Set the value at an index using setArray(array, index, value) _
+  setArray(a, 1, "updated value");
+  PRINT ("Updated a[1] to 'updated value'");
+  PRINT("/n");
+  PRINT (a);
+  PRINT("/n");
+  
+  _ Get the value at an index using getArray(array, index) _
+  PRINT ("Value at index 4: ", getArray(a, 4));
+  PRINT("/n");
+}

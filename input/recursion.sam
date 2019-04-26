@@ -1,0 +1,12 @@
+FUNC fib(VAR n){
+  IF (n == 0){RETURN 0;}
+  ELSE IF (n == 1){RETURN 1;}
+  RETURN fib(n - 2) + fib(n - 1);
+}
+
+FUNC main(){
+  _ Evaluate Fibonacci(8) _
+  PRINT("Fibonacci 8 is: ", fib(8));
+  PRINT("/n");
+  RETURN 0;
+}
